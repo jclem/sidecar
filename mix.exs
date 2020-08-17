@@ -6,13 +6,12 @@ defmodule Sidecar.MixProject do
   def project do
     [
       app: :sidecar,
+      description: "Run sidecar processes with Elixir apps",
       version: @version,
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      description: "Run sidecar processes with Elixir apps",
-      licenses: ["MIT"],
-      files: ["lib", "portwrap.sh", ".formatter.exs", "mix.exs", "README.md", "LICENSE.md"],
+      package: package(),
 
       # Docs
       name: "Sidecar",
@@ -39,6 +38,14 @@ defmodule Sidecar.MixProject do
       {:ex_doc, "~> 0.22", only: :dev, runtime: false}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
+    ]
+  end
+
+  defp package do
+    [
+      licenses: ["MIT"],
+      files: ["lib", "portwrap.sh", ".formatter.exs", "mix.exs", "README.md", "LICENSE.md"],
+      links: %{"GitHub" => "https://github.com/jclem/sidecar"}
     ]
   end
 end
