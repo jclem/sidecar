@@ -17,6 +17,15 @@ defmodule Sidecar.Process do
 
     cmd = Keyword.fetch!(opts, :command)
 
+    cmd =
+      case cmd do
+        cmd when is_function(cmd) ->
+          cmd.()
+
+        cmd when is_binary(cmd) ->
+          cmd
+      end
+
     port =
       Port.open(
         {:spawn, "#{Path.join([__DIR__, "..", "..", "portwrap.sh"])} #{cmd}"},

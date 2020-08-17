@@ -1,5 +1,5 @@
 defmodule Sidecar.SupervisorTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   doctest Sidecar.Supervisor
 
   import ExUnit.CaptureLog
