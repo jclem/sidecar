@@ -13,9 +13,9 @@ defmodule Sidecar.Process do
 
   @impl true
   def init(opts) do
-    Logger.metadata(sidecar_process: Keyword.get(opts, :name))
+    Logger.metadata(sidecar: Keyword.fetch!(opts, :name))
 
-    cmd = get_cmd(opts)
+    cmd = Keyword.fetch!(opts, :command)
 
     port =
       Port.open(
@@ -30,9 +30,5 @@ defmodule Sidecar.Process do
   def handle_info({_port, {:data, {_eol, data}}}, state) do
     Logger.info(data)
     {:noreply, state}
-  end
-
-  defp get_cmd(opts) do
-    Keyword.get(opts, :command)
   end
 end

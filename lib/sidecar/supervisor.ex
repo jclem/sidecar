@@ -15,7 +15,7 @@ defmodule Sidecar.Supervisor do
       init_opts
       |> Keyword.get(:processes, [])
       |> Enum.map(fn {id, command} ->
-        Supervisor.child_spec({Sidecar.Process, [command: command]}, id: id)
+        Supervisor.child_spec({Sidecar.Process, [command: command, name: id]}, id: id)
       end)
 
     Supervisor.init(children, strategy: :one_for_one)
