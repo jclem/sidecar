@@ -5,8 +5,9 @@ defmodule Sidecar.Supervisor do
 
   use Supervisor
 
-  def start_link(init_opts) do
-    Supervisor.start_link(__MODULE__, init_opts)
+  def start_link(_init_opts \\ []) do
+    processes = Application.get_env(:sidecar, :processes, [])
+    Supervisor.start_link(__MODULE__, processes: processes)
   end
 
   @impl true
