@@ -17,6 +17,28 @@ def deps do
 end
 ```
 
+## Configuration
+
+First, configure your sidecar processes:
+
+```elixir
+config :sidecar, processes: [
+  ngrok: "ngrok http 4000",
+  npm: "npm run dev"
+]
+```
+
+Then, add the Sidecar supervisor to your application's supervision tree:
+
+```elixir
+def start(_type, _args) do
+  children = [
+    # ...etc.
+    Sidecar.Supervisor
+  ]
+end
+```
+
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/sidecar](https://hexdocs.pm/sidecar).
