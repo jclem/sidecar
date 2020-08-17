@@ -10,6 +10,9 @@ defmodule Sidecar.MixProject do
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      description: "Run sidecar processes with Elixir apps",
+      licenses: ["MIT"],
+      files: ["lib", "portwrap.sh", ".formatter.exs", "mix.exs", "README.md", "LICENSE.md"],
 
       # Docs
       name: "Sidecar",
