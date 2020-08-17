@@ -20,7 +20,7 @@ defmodule Sidecar.Process do
     port =
       Port.open(
         {:spawn, "#{Path.join([__DIR__, "..", "..", "portwrap.sh"])} #{cmd}"},
-        [{:line, Keyword.get(opts, :line_length, 1024)}]
+        [{:line, Keyword.get(opts, :line_length, 1024)}, :exit_status]
       )
 
     {:ok, %{port: port}}
@@ -30,5 +30,10 @@ defmodule Sidecar.Process do
   def handle_info({_port, {:data, {_eol, data}}}, state) do
     Logger.info(data)
     {:noreply, state}
+  end
+
+  def handle_info({_port, {:exit_status, exit_status}}, state) do
+    Logger.warn("process_exit=#{exit_status}")
+    {:stop, {:shutdown, {:process_exit, exit_status}}, state}
   end
 end
