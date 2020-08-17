@@ -42,18 +42,14 @@ defmodule Sidecar do
   end
   ```
 
-  And they can also be lazily evaluated each time the process starts or is
-  restarted:
+  ## Defining Commands
 
-  ```elixir
-  def start(_type, _args) do
-    children = [
-      # ...etc.
-      {Sidecar.Supervisor, [processes: [ngrok: fn ->
-        "ngrok http \#{MyApp.Endpoint.config(:http)[:port]}"
-      end]]}
-    ]
-  end
-  ```
+  Process commands can be defined in multiple ways:
+
+  - As a string: `"echo hello"`—the command will be split on whitespace.
+  - As a list of strings: `["echo", "hello"]`
+  - As a function returning a string or a list of strings: `fn -> ["echo", "hello"] end`
+
+  See `t:Sidecar.Process.command/0` for details.
   """
 end

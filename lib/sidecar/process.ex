@@ -16,8 +16,39 @@ defmodule Sidecar.Process do
 
   If a function, the function will be evaluated just before the sidecar
   process starts.
+
+  A command that is a string or a function returning a string will be split
+  on whitespace.
+
+  ## Examples
+
+  *The command is the value in each of these keyword lists.*
+
+  ### A string
+
+  ```elixir
+  [ngrok: "ngrok http 4000"]
+  ```
+
+  ### A list of strings
+
+  ```elixir
+  [ngrok: ~w(ngrok http 4000)]
+  ```
+
+  ### A function returning a string
+
+  ```elixir
+  [ngrok: fn -> "ngrok http \#{MyApp.Endpoint.config(:http)[:port]}" end]
+  ```
+
+  ### A function returning a list of strings
+
+  ```elixir
+  [ngrok: fn -> ["ngrok", "http", MyApp.Endpoint.config(:http)[:port]] end]
+  ```
   """
-  @type command :: String.t() | (() -> String.t())
+  @type command :: String.t() | (() -> String.t()) | [String.t()] | (() -> [String.t()])
 
   @typedoc """
   Options used to start a sidecar process
@@ -42,19 +73,16 @@ defmodule Sidecar.Process do
   def init(opts) do
     Logger.metadata(sidecar: Keyword.fetch!(opts, :name))
 
-    command =
-      case Keyword.fetch!(opts, :command) do
-        command when is_function(command) ->
-          command.()
-
-        command when is_binary(command) ->
-          command
-      end
+    command = opts |> Keyword.fetch!(:command) |> normalize_command()
 
     port =
       Port.open(
-        {:spawn, "#{Path.join([__DIR__, "..", "..", "portwrap.sh"])} #{command}"},
-        [{:line, Keyword.get(opts, :line_length, 1024)}, :exit_status]
+        {:spawn_executable, Path.join([__DIR__, "..", "..", "portwrap.sh"])},
+        [
+          :exit_status,
+          line: Keyword.get(opts, :line_length, 1024),
+          args: command
+        ]
       )
 
     {:ok, %{port: port}}
@@ -70,4 +98,8 @@ defmodule Sidecar.Process do
     Logger.warn("process_exit=#{exit_status}")
     {:stop, {:shutdown, {:process_exit, exit_status}}, state}
   end
+
+  defp normalize_command(command) when is_function(command), do: normalize_command(command.())
+  defp normalize_command(command) when is_binary(command), do: String.split(command, ~r/\s/)
+  defp normalize_command(command) when is_list(command), do: command
 end
