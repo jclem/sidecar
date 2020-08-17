@@ -1,4 +1,4 @@
-# Sidecar
+# Sidecar [![CI](https://github.com/jclem/sidecar/workflows/CI/badge.svg?branch=main&event=push)](https://github.com/jclem/sidecar/actions?query=event%3Apush+branch%3Amain+workflow%3ACI)
 
 Sidecar makes it easy to run sidecar processes alongside your main
 application. This is especially useful in development when you may want to
