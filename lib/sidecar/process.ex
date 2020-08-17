@@ -12,6 +12,14 @@ defmodule Sidecar.Process do
   require Logger
 
   @typedoc """
+  A command that starts a sidecar process
+
+  If a function, the function will be evaluated just before the sidecar
+  process starts.
+  """
+  @type command :: String.t() | (() -> String.t())
+
+  @typedoc """
   Options used to start a sidecar process
 
   - `name` An identifier for the process
@@ -20,7 +28,7 @@ defmodule Sidecar.Process do
     evaluated just before the sidecar process is started. Its return value will
     be the command.
   """
-  @type init_opts :: [name: atom, command: String.t() | (() -> String.t())]
+  @type init_opts :: [name: atom, command: command]
 
   @doc """
   Start a supervised sidecar process.

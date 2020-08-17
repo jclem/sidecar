@@ -10,10 +10,9 @@ defmodule Sidecar.Supervisor do
   Options used to start a list of sidecar processes.
 
   - `processes` A keyword list of processes to start whose keys are unique
-    process identifiers, and whose values are `t:Sidecar.Process.init_opts/0`
-    lists
+    process identifiers, and whose values are `t:Sidecar.Process.command/0`s
   """
-  @type init_opts :: [processes: Keyword.t(Sidecar.Process.init_opts())]
+  @type init_opts :: [processes: Keyword.t(Sidecar.Process.command())]
 
   @doc """
   Start one or more supervised sidecar processes.
