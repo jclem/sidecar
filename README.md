@@ -12,7 +12,7 @@ by adding `sidecar` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:sidecar, "~> 0.1.0"}
+    {:sidecar, "~> 0.5.0"}
   ]
 end
 ```
